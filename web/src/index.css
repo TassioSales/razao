@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "@fontsource-variable/source-serif-4";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+/* A ledger book: warm paper, ruled lines, green ink for the firm, oxblood for what's wrong. */
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", ui-serif, Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-paper: #f6f2e9;
+  --color-sheet: #fffdf8;
+  --color-rule: #e3dccb;
+  --color-rule-strong: #cfc5ae;
+  --color-ink: #1d1b16;
+  --color-ink-2: #4a463c;
+  --color-ink-3: #7d7767;
+  --color-ink-4: #a8a190;
+
+  --color-forest: #1f3d2f;
+  --color-forest-2: #2f5a45;
+  --color-moss: #e4ecdf;
+  --color-oxblood: #9b2c1f;
+  --color-rose: #f6e3de;
+  --color-gold: #a67c1a;
+  --color-sand: #f3e9cf;
+  --color-navy: #25476b;
+  --color-mist: #e1e9f1;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-sand);
+}
+
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule-strong) transparent;
+}
+
+input[type="range"] {
+  accent-color: var(--color-forest);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.rise {
+  animation: rise 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; }
+}

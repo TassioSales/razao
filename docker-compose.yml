@@ -1,0 +1,24 @@
+# Postgres do razao. Porta 54329 para não brigar com um Postgres local.
+# Durabilidade ligada (fsync e synchronous_commit no padrão): os números do
+# benchmark são com escrita durável.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: razao-postgres
+    environment:
+      POSTGRES_USER: razao
+      POSTGRES_PASSWORD: razao
+      POSTGRES_DB: razao
+    ports:
+      - "127.0.0.1:54329:5432"
+    command: ["postgres", "-c", "shared_buffers=512MB", "-c", "max_wal_size=4GB", "-c", "checkpoint_timeout=15min"]
+    volumes:
+      - razao-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U razao -d razao"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  razao-pgdata:

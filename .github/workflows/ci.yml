@@ -1,0 +1,41 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: razao
+          POSTGRES_PASSWORD: razao
+          POSTGRES_DB: razao
+        ports:
+          - 54329:5432
+        options: >-
+          --health-cmd "pg_isready -U razao -d razao"
+          --health-interval 2s --health-timeout 3s --health-retries 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.26"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Frontend
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+      - name: Vet
+        run: go vet ./...
+      - name: Testes com detector de corridas
+        run: go test -race ./...
+      - name: Benchmark de fumaça e auditoria
+        run: go run ./cmd/razao bench -seconds 5 -workers 256 -compare
